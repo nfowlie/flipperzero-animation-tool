@@ -21,9 +21,15 @@
 	};
 </script>
 
-<dialog bind:this={dialog} on:close={() => (showModal = false)}>
-	<h1>Select FlipperZero Firmware Directory</h1>
-	<h2>Current FlipperZero Firmware Directory</h2>
-	<p>{$flipperzeroDir}</p>
-	<button on:click={setFlipperZeroDir}>SELECT</button>
+<dialog
+	bind:this={dialog}
+	on:close={() => (showModal = false)}
+	on:click|self={() => dialog.close()}
+>
+	<div on:click|stopPropagation>
+		<h1>Select FlipperZero Firmware Directory</h1>
+		<h2>Current FlipperZero Firmware Directory</h2>
+		<p>{$flipperzeroDir}</p>
+		<button on:click={setFlipperZeroDir}>SELECT</button>
+	</div>
 </dialog>

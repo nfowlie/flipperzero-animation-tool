@@ -12,7 +12,6 @@
 
 	let showModal = false;
 	flipperzeroDir.set(localStorage.getItem('flipperzeroDir'));
-	console.log($flipperzeroDir);
 
 	$: $flipperzeroDir,
 		(() => {
