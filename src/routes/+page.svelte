@@ -4,7 +4,8 @@
 	import GifConvert from '$lib/GIFConvert.svelte';
 	import { listen } from '@tauri-apps/api/event';
 	import Modal from '$lib/FlipperZeroDialog.svelte';
-	import { flipperzeroDir } from '../stores';
+	import { flipperzeroDir, outputPath } from '../stores';
+	import '@picocss/pico';
 
 	const unlisten = listen('my_event', (payload) => {
 		showModal = true;
@@ -12,6 +13,7 @@
 
 	let showModal = false;
 	flipperzeroDir.set(localStorage.getItem('flipperzeroDir'));
+	outputPath.set(localStorage.getItem('flipperzeroDir') + '/assets/dolphin/external/test');
 
 	$: $flipperzeroDir,
 		(() => {

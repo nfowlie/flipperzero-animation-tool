@@ -1,6 +1,6 @@
 <script>
 	import { open } from '@tauri-apps/api/dialog';
-	import { flipperzeroDir } from '../stores.js';
+	import { flipperzeroDir, outputPath } from '../stores.js';
 
 	export let showModal;
 
@@ -13,6 +13,7 @@
 		try {
 			const selectedPath = await open({ directory: true, multiple: false });
 			flipperzeroDir.set(selectedPath);
+			outputPath.set(selectedPath + '/assets/dolphin/external/test');
 			localStorage.setItem('flipperzeroDir', $flipperzeroDir);
 			if (!selectedPath) return;
 		} catch (err) {

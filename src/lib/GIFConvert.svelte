@@ -3,7 +3,8 @@
 	import { gifPath, outputPath } from '../stores';
 
 	const convertGif = async () => {
-		new Command('graphics-magick', [
+		console.log($outputPath);
+		await new Command('graphics-magick', [
 			'convert',
 			$gifPath,
 			'-resize',
