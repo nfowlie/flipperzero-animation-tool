@@ -13,7 +13,7 @@
 
 	let showModal = false;
 	flipperzeroDir.set(localStorage.getItem('flipperzeroDir'));
-	outputPath.set(localStorage.getItem('flipperzeroDir') + '/assets/dolphin/external/test');
+	outputPath.set(localStorage.getItem('flipperzeroDir') + '/assets/dolphin/external');
 
 	$: $flipperzeroDir,
 		(() => {

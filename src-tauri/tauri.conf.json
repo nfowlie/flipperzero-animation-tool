@@ -47,7 +47,7 @@
 				"removeFile": true,
 				"renameFile": true,
 				"exists": true,
-				"scope": ["$APP/*", "$APP"]
+				"scope": ["**"]
 			},
 			"dialog": { "all": true },
 			"all": false

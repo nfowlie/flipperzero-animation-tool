@@ -13,7 +13,7 @@
 		try {
 			const selectedPath = await open({ directory: true, multiple: false });
 			flipperzeroDir.set(selectedPath);
-			outputPath.set(selectedPath + '/assets/dolphin/external/test');
+			outputPath.set(selectedPath + '/assets/dolphin/external');
 			localStorage.setItem('flipperzeroDir', $flipperzeroDir);
 			if (!selectedPath) return;
 		} catch (err) {
