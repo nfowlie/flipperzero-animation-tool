@@ -1,5 +1,15 @@
 <script>
-	import { animationName, fps, duration, cooldown } from '../stores';
+	import {
+		animationName,
+		fps,
+		duration,
+		cooldown,
+		minButthurt,
+		maxButthurt,
+		minLevel,
+		maxLevel,
+		weight
+	} from '../stores';
 </script>
 
 <form>
@@ -30,4 +40,14 @@
 		min="0"
 		bind:value={$cooldown}
 	/>
+	<label for="min-butthurt">Min butthurt</label>
+	<input name="min-butthurt" type="number" placeholder="Min Butthurt" bind:value={$minButthurt} />
+	<label for="max-butthurt">Max butthurt</label>
+	<input name="max-butthurt" type="number" placeholder="Max Butthurt" bind:value={$maxButthurt} />
+	<label for="min-level">Min level</label>
+	<input name="min-level" type="number" placeholder="Min Level" bind:value={$minLevel} />
+	<label for="max-level">Max level</label>
+	<input name="max-level" type="number" placeholder="Max Level" bind:value={$maxLevel} />
+	<label for="weight">Weight</label>
+	<input name="weight" type="number" placeholder="Weight" bind:value={$weight} />
 </form>

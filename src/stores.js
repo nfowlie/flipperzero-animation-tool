@@ -9,3 +9,10 @@ export const animationName = writable('');
 export const fps = writable(1);
 export const duration = writable()
 export const cooldown = writable()
+
+// Manifest Info
+export const minButthurt = writable()
+export const maxButthurt = writable()
+export const minLevel = writable()
+export const maxLevel = writable()
+export const weight = writable()
