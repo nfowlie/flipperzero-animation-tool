@@ -10,9 +10,17 @@
 		maxLevel,
 		weight
 	} from '../stores';
+	import GifConvert from './GIFConvert.svelte';
+
+	let gifConvert;
 </script>
 
-<form id="gif-form" onSubmit={}>
+<form
+	id="gif-form"
+	on:submit|preventDefault={() => {
+		gifConvert.convertGif();
+	}}
+>
 	<h2>Animation Information</h2>
 	<div />
 	<div>
@@ -104,6 +112,8 @@
 		<input required name="weight" type="number" placeholder="Weight" min="1" bind:value={$weight} />
 	</div>
 </form>
+
+<GifConvert bind:this={gifConvert} />
 
 <style>
 	form {

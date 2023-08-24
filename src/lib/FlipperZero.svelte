@@ -3,13 +3,14 @@
 	import { open } from '@tauri-apps/api/dialog';
 	import { Command } from '@tauri-apps/api/shell';
 	import { flipperzeroDir } from '../stores';
-	import GifConvert from './GIFConvert.svelte';
 
-	let gifConvert;
-
-	const convertFramesToFlipper = async () => {
+	export const convertFramesToFlipper = async () => {
 		try {
-			await removeFile($flipperzeroDir + '/assets/resources/dolphin/manifest.txt');
+			const manifestExists = await exists(
+				$flipperzeroDir + '/assets/resources/dolphin/manifest.txt'
+			);
+			if (manifestExists)
+				await removeFile($flipperzeroDir + '/assets/resources/dolphin/manifest.txt');
 			await new Command(
 				'flipperzero-frames',
 				['icons', 'proto', 'dolphin_internal', 'dolphin_ext', 'resources'],
@@ -17,19 +18,12 @@
 			).execute();
 		} catch (err) {
 			console.error(err);
+			alert('Error exporting frames');
 		}
 	};
 </script>
 
-<GifConvert bind:this={gifConvert} />
-<button
-	form="gif-form"
-	type="submit"
-	on:click={() => {
-		gifConvert.convertGif();
-		convertFramesToFlipper();
-	}}>Convert To Flipper Animation</button
->
+<button form="gif-form" type="submit">Convert To Flipper Animation</button>
 
 <style>
 	button {

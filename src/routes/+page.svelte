@@ -26,7 +26,6 @@
 <h1>FlipperZero Animation Tool</h1>
 <GIFImport />
 <GifInfo />
-<FlipperZero />
 
 <Modal bind:showModal />
 
