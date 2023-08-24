@@ -19,8 +19,15 @@
 
 	export const convertGif = async () => {
 		try {
+			if ($flipperzeroDir === null) throw new Error('FlipperZero Firmware Directory not selected');
+			if ($flipperzeroDir !== null) {
+				const fbtExists = await exists($flipperzeroDir + '/fbt');
+				if (!fbtExists)
+					throw new Error('FlipperZero Firmware Directory selected is not a Firmware Directory');
+			}
 			if (!$gifPath) throw new Error('No Gif Selected');
-
+			const animationExists = await exists($outputPath + '/' + $animationName);
+			if (animationExists) throw new Error('An animation with that name already exists');
 			const frameCount = await new Command('graphics-magick', ['identify', $gifPath])
 				.execute()
 				.then((res) => {

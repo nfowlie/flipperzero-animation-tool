@@ -1,6 +1,5 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::Manager;
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 // use tauri::{WindowBuilder}
 
@@ -34,9 +33,9 @@ fn main() {
                 let window = event.window();
                 window
                     .emit(
-                        "my_event",
+                        "show_modal",
                         Payload {
-                            message: "Test Message".into(),
+                            message: "Show Modal".into(),
                         },
                     )
                     .unwrap();

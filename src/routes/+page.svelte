@@ -9,17 +9,17 @@
 	import '@picocss/pico';
 	// import Dys from '../../static/fonts/LigaOpenDyslexic3-Regular.ttf';
 
-	const unlisten = listen('my_event', (payload) => {
+	let showModal;
+	const unlisten = listen('show_modal', (payload) => {
 		showModal = true;
 	});
 
-	let showModal = false;
 	flipperzeroDir.set(localStorage.getItem('flipperzeroDir'));
 	outputPath.set(localStorage.getItem('flipperzeroDir') + '/assets/dolphin/external');
 
 	$: $flipperzeroDir,
 		(() => {
-			showModal = $flipperzeroDir === null ? true : false;
+			showModal = $flipperzeroDir == null ? true : false;
 		})();
 </script>
 

@@ -31,6 +31,6 @@
 		<h1>Select FlipperZero Firmware Directory</h1>
 		<h2>Current FlipperZero Firmware Directory</h2>
 		<button on:click={setFlipperZeroDir}>SELECT</button>
-		<p>{$flipperzeroDir !== null ? $flipperzeroDir : ``}</p>
+		<p>{$flipperzeroDir != null ? $flipperzeroDir : ``}</p>
 	</div>
 </dialog>
