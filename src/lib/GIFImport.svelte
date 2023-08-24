@@ -3,6 +3,9 @@
 	import { readDir, readBinaryFile } from '@tauri-apps/api/fs';
 	import { writable } from 'svelte/store';
 	import { gifPath } from '../stores.js';
+	import LoadingDialog from './LoadingDialog.svelte';
+
+	let showLoading;
 
 	let image;
 	const getAnimationFile = async () => {
@@ -12,12 +15,16 @@
 				title: 'Open GIF File',
 				filters: [{ name: 'Image', extensions: ['gif'] }]
 			});
-			console.log(selectedPath);
+			if (!selectedPath) {
+				showLoading = false;
+				return;
+			}
+			showLoading = true;
 			gifPath.set(selectedPath);
 			const content = await readBinaryFile(selectedPath);
 			const blob = new Blob([content], { type: 'image/gif' });
 			image.setAttribute('src', URL.createObjectURL(blob));
-			if (!selectedPath) return;
+			showLoading = false;
 		} catch (err) {
 			console.error(err);
 		}
@@ -28,6 +35,8 @@
 	<button on:click={getAnimationFile}>Select GIF</button>
 	<img bind:this={image} alt="Selected GIF" height="64" width="128" />
 </div>
+
+<LoadingDialog bind:showLoading />
 
 <style>
 	button {
