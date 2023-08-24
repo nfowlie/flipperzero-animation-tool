@@ -94,7 +94,7 @@
 		"windows": [
 			{
 				"fullscreen": false,
-				"height": 600,
+				"height": 990,
 				"resizable": true,
 				"title": "Flipperzero Animation Tool",
 				"width": 800
