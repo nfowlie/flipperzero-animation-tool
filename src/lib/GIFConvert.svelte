@@ -15,7 +15,7 @@
 		weight
 	} from '../stores';
 
-	const convertGif = async () => {
+	export const convertGif = async () => {
 		console.log($outputPath);
 		const frameCount = await new Command('graphics-magick', ['identify', $gifPath])
 			.execute()
@@ -61,6 +61,7 @@
 			$cooldown +
 			'\n\nBubble slots: 0\n';
 		await writeTextFile($outputPath + '/' + $animationName + '/meta.txt', metaText);
+		editManifest();
 	};
 
 	const editManifest = async () => {
@@ -92,8 +93,3 @@
 		}
 	};
 </script>
-
-<button on:click={editManifest}>Edit</button>
-
-<button on:click={convertGif}>Convert GIF to Frames</button>
-<p>${gifPath}</p>

@@ -1,8 +1,11 @@
 <script>
-	import { readDir, removeFile } from '@tauri-apps/api/fs';
+	import { exists, readDir, removeFile } from '@tauri-apps/api/fs';
 	import { open } from '@tauri-apps/api/dialog';
 	import { Command } from '@tauri-apps/api/shell';
 	import { flipperzeroDir } from '../stores';
+	import GifConvert from './GIFConvert.svelte';
+
+	let gifConvert;
 
 	const convertFramesToFlipper = async () => {
 		try {
@@ -18,4 +21,18 @@
 	};
 </script>
 
-<button on:click={convertFramesToFlipper}>Convert To Flipper Animation</button>
+<GifConvert bind:this={gifConvert} />
+<button
+	form="gif-form"
+	type="submit"
+	on:click={() => {
+		gifConvert.convertGif();
+		convertFramesToFlipper();
+	}}>Convert To Flipper Animation</button
+>
+
+<style>
+	button {
+		margin-inline: 1.2rem;
+	}
+</style>

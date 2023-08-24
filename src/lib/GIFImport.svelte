@@ -3,7 +3,6 @@
 	import { readDir, readBinaryFile } from '@tauri-apps/api/fs';
 	import { writable } from 'svelte/store';
 	import { gifPath } from '../stores.js';
-	import GifInfo from './GIFInfo.svelte';
 
 	let image;
 	const getAnimationFile = async () => {
@@ -27,16 +26,20 @@
 
 <div class="gifImporter">
 	<button on:click={getAnimationFile}>Select GIF</button>
-	<img bind:this={image} alt="selected gif" height="64" width="128" />
-	<GifInfo />
+	<img bind:this={image} alt="Selected GIF" height="64" width="128" />
 </div>
 
 <style>
+	button {
+		margin-inline: 1.2rem;
+	}
+	img:not([src]) {
+		display: none;
+	}
+	img {
+		margin-bottom: 1.2rem;
+	}
 	.gifImporter {
 		display: flex;
-		flex-direction: column;
-	}
-	.gifImporter > button {
-		margin-block-end: 1.2rem;
 	}
 </style>

@@ -30,7 +30,7 @@
 	<div on:click|stopPropagation>
 		<h1>Select FlipperZero Firmware Directory</h1>
 		<h2>Current FlipperZero Firmware Directory</h2>
-		<p>{$flipperzeroDir}</p>
 		<button on:click={setFlipperZeroDir}>SELECT</button>
+		<p>{$flipperzeroDir}</p>
 	</div>
 </dialog>
