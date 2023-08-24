@@ -18,7 +18,6 @@
 			).execute();
 		} catch (err) {
 			console.error(err);
-			alert('Error exporting frames');
 		}
 	};
 </script>

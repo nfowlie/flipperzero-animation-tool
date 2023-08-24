@@ -15,10 +15,13 @@
 		weight
 	} from '../stores';
 	import FlipperZero from './FlipperZero.svelte';
+	import LoadingDialog from './LoadingDialog.svelte';
 	let flipperzero;
+	let showLoading;
 
 	export const convertGif = async () => {
 		try {
+			showLoading = true;
 			if ($flipperzeroDir === null) throw new Error('FlipperZero Firmware Directory not selected');
 			if ($flipperzeroDir !== null) {
 				const fbtExists = await exists($flipperzeroDir + '/fbt');
@@ -52,6 +55,7 @@
 			createMeta(frameCount);
 		} catch (err) {
 			console.error(err);
+			showLoading = false;
 			alert(err);
 		}
 	};
@@ -79,6 +83,7 @@
 			editManifest();
 		} catch (err) {
 			console.error('Error creating Meta.txt for animation');
+			showLoading = false;
 			alert('Error creating Meta.txt for animation');
 		}
 	};
@@ -113,9 +118,20 @@
 					$flipperzeroDir + '/assets/dolphin/external/manifest.txt',
 					manifest + newAnimationManifest
 				);
-				flipperzero.convertFramesToFlipper();
+				flipperzero
+					.convertFramesToFlipper()
+					.then(() => {
+						showLoading = false;
+						alert('Animation Complete');
+					})
+					.catch((err) => {
+						showLoading = false;
+						console.error(err);
+						alert('Error exporting frames');
+					});
 			}
 		} catch (err) {
+			showLoading = false;
 			if (err) {
 				console.error(err);
 				alert(err);
@@ -128,3 +144,4 @@
 </script>
 
 <FlipperZero bind:this={flipperzero} />
+<LoadingDialog bind:showLoading />
