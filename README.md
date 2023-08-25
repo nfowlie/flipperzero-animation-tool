@@ -10,11 +10,12 @@ An application to turn animated GIFs into FlipperZero animation data.
 
 1. Go to [FlipperZero Firmware GitHub Repo](https://github.com/flipperdevices/flipperzero-firmware)
 2. Clone the repository
-3. Install [GraphicsMagick](http://www.graphicsmagick.org/)
-4. Open FlipperZero Animation Tool
-5. On the FlipperZero Firmware Directory screen click the Select FlipperZero Firmware Button and Select the root of the FlippZero Firmware directory
-6. Select a gif you would like to convert to a FlipperZero Animation
-7. Fill out the form below with the GIF information
+3. Run the fbt file in the repository
+4. Install [GraphicsMagick](http://www.graphicsmagick.org/)
+5. Open FlipperZero Animation Tool
+6. On the FlipperZero Firmware Directory screen click the Select FlipperZero Firmware Button and Select the root of the FlippZero Firmware directory
+7. Select a gif you would like to convert to a FlipperZero Animation
+8. Fill out the form below with the GIF information
    1. Good Defaults
       - Name: A unique animation name
       - FPS: 7
@@ -25,9 +26,9 @@ An application to turn animated GIFs into FlipperZero animation data.
       - Min level: 0 `To appear your level must be higher than this number`
       - Max level: 3 `To appear your level must be lower than this number`
       - Weight: 3 `Higher Weight means more priority`
-8. Click the Convert To Flipper Animation button
-9. Go to the %flipper-zero-firmware%/assets/resources/dolphin directory
-10. Copy your animation folder and the manifest.txt to the /SD Card/dolphin directory
+9. Click the Convert To Flipper Animation button
+10. Go to the %flipper-zero-firmware%/assets/resources/dolphin directory
+11. Copy your animation folder and the manifest.txt to the /SD Card/dolphin directory
 
 ## Requirements
 

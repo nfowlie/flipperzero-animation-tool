@@ -1,3 +1,6 @@
 {
-	"cSpell.words": ["tauri"]
+	"cSpell.words": [
+		"tauri"
+	],
+	"nuxt.isNuxtApp": false
 }

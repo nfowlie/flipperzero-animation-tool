@@ -30,6 +30,11 @@
 						"args": true
 					},
 					{
+						"name": "flipperzero-frames-win",
+						"cmd": "bash",
+						"args": true
+					},
+					{
 						"name": "flipperzero-directory",
 						"cmd": "cd",
 						"args": true
@@ -50,6 +55,7 @@
 				"scope": ["**"]
 			},
 			"dialog": { "all": true },
+			"os": { "all": true },
 			"all": false
 		},
 		"bundle": {
@@ -97,7 +103,8 @@
 				"height": 990,
 				"resizable": true,
 				"title": "Flipperzero Animation Tool",
-				"width": 800
+				"width": 800,
+				"theme": "Dark"
 			}
 		]
 	}
