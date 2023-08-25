@@ -19,7 +19,6 @@ fn main() {
         Menu::new().add_item(flipzero_firmware_dir).add_item(quit),
     );
     let menu = Menu::new()
-        .add_native_item(MenuItem::Copy)
         .add_submenu(submenu);
 
     tauri::Builder::default()
