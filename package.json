@@ -33,6 +33,7 @@
 	"type": "module",
 	"dependencies": {
 		"@picocss/pico": "^1.5.10",
-		"@tauri-apps/api": "^1.4.0"
+		"@tauri-apps/api": "^1.4.0",
+		"gifuct-js": "^2.1.2"
 	}
 }
