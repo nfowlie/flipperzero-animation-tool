@@ -20,15 +20,13 @@
 		bubbleTextPresent
 	} from '../stores';
 	import GifConvert from './GIFConvert.svelte';
-
-	let gifConvert;
-
-	$: $bubbleText, checkIfBubbleText();
-
 	const checkIfBubbleText = () => {
-		if ($bubbleText?.trim() == '') bubbleTextPresent.set(false);
+		if ($bubbleText?.trim() == '' || $bubbleText == undefined) bubbleTextPresent.set(false);
 		else bubbleTextPresent.set(true);
 	};
+	let gifConvert;
+	bubbleTextPresent.set(false);
+	$: $bubbleText, checkIfBubbleText();
 </script>
 
 <form

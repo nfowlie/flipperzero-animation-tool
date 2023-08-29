@@ -19,7 +19,8 @@
 		alignV,
 		startFrame,
 		endFrame,
-		bubbleText
+		bubbleText,
+		bubbleTextPresent
 	} from '../stores';
 	import FlipperZero from './FlipperZero.svelte';
 	import LoadingDialog from './LoadingDialog.svelte';
@@ -74,7 +75,26 @@
 				frameOrder += i + ' ';
 			}
 			frameOrder = frameOrder.trim();
-			let bubbleCount = 1;
+			let bubbleCount = $bubbleTextPresent ? 1 : 0;
+			let metaTextBubble = '';
+			if ($bubbleTextPresent) {
+				metaTextBubble =
+					'\nSlot: 0\nX: ' +
+					$textBoxX +
+					'\nY: ' +
+					$textBoxY +
+					'\nText: ' +
+					$bubbleText.replace('\n', '\\n') +
+					'\nAlignH: ' +
+					$alignH +
+					'\nAlignV: ' +
+					$alignV +
+					'\nStartFrame: ' +
+					$startFrame +
+					'\nEndFrame: ' +
+					$endFrame +
+					'\n';
+			}
 			const metaText =
 				'Filetype: Flipper Animation\nVersion: 1\n\nWidth: 128\nHeight: 64\nPassive frames: ' +
 				(frameCount - 1) +
@@ -88,21 +108,8 @@
 				$cooldown +
 				'\n\nBubble slots: ' +
 				bubbleCount +
-				'\n\nSlot: 0\nX: ' +
-				$textBoxX +
-				'\nY: ' +
-				$textBoxY +
-				'\nText: ' +
-				$bubbleText.replace('\n', '\\n') +
-				'\nAlignH: ' +
-				$alignH +
-				'\nAlignV: ' +
-				$alignV +
-				'\nStartFrame: ' +
-				$startFrame +
-				'\nEndFrame: ' +
-				$endFrame +
-				'\n';
+				'\n' +
+				metaTextBubble;
 			await writeTextFile($outputPath + '/' + $animationName + '/meta.txt', metaText);
 			editManifest();
 		} catch (err) {
