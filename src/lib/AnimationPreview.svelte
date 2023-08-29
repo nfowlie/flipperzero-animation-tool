@@ -1,7 +1,8 @@
 <script>
 	import { parseGIF, decompressFrames } from 'gifuct-js';
 	import { onMount } from 'svelte';
-	import { fps } from '../stores';
+	import { fps, textBoxX, textBoxY, bubbleText } from '../stores';
+	import { text } from '@sveltejs/kit';
 
 	export let gif;
 	let loadedFrames,
@@ -15,7 +16,10 @@
 	$: if (gif) renderGif(gif);
 	$: $fps,
 		() => {
-			if (gif) renderGif(gif);
+			if (gif) {
+				needsDisposal = true;
+				renderGif(gif);
+			}
 		};
 
 	onMount(() => {
@@ -93,6 +97,41 @@
 		const imageData = gifContext?.getImageData(0, 0, gifCanvas.width, gifCanvas.height);
 		const other = gifContext?.createImageData(gifCanvas.width, gifCanvas.height);
 		canvasContext.putImageData(imageData, 0, 0);
+
+		createTextBox();
+	};
+
+	const createTextBox = () => {
+		canvasContext.font = '16px haxrcorp-4089';
+		let lines = '';
+		let textWidth = 0;
+		if ($bubbleText) {
+			lines = $bubbleText.split('\n');
+			lines.forEach((line, index) => {
+				let lineStartHeight = 13;
+				if (index !== 0) lineStartHeight = 0;
+				canvasContext.strokeText(line, $textBoxX + 3, $textBoxY + lineStartHeight + index * 16);
+				if (textWidth < canvasContext.measureText(line).width)
+					textWidth = canvasContext.measureText(line).width;
+			});
+		}
+		canvasContext.beginPath();
+		canvasContext.moveTo($textBoxX, $textBoxY);
+		canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY);
+		canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY + lines.length * 10 + 4);
+		canvasContext.lineTo($textBoxX, $textBoxY + lines.length * 10 + 4);
+
+		canvasContext.stroke();
+		canvasContext.fillStyle = '#fff';
+		canvasContext.fill();
+
+		if ($bubbleText) {
+			lines.forEach((line, index) => {
+				let lineStartHeight = 10;
+				// if (index !== 0) lineStartHeight = 0;
+				canvasContext.strokeText(line, $textBoxX + 3, $textBoxY + lineStartHeight + index * 10);
+			});
+		}
 	};
 </script>
 
@@ -100,7 +139,7 @@
 
 <style>
 	#AnimationPreview {
-		height: 64px;
-		width: 128px;
+		height: calc(64px * 2);
+		width: calc(128px * 2);
 	}
 </style>

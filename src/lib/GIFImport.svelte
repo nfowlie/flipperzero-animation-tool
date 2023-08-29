@@ -1,11 +1,12 @@
 <script>
 	import { open } from '@tauri-apps/api/dialog';
-	import { readDir, readBinaryFile } from '@tauri-apps/api/fs';
+	import { readDir, readBinaryFile, exists, createDir } from '@tauri-apps/api/fs';
 	import { writable } from 'svelte/store';
-	import { gifPath } from '../stores.js';
+	import { gifPath, outputPath, tempPath } from '../stores.js';
 	import LoadingDialog from './LoadingDialog.svelte';
 	import AnimationPreview from './AnimationPreview.svelte';
 	import { parseGIF, decompressFrames } from 'gifuct-js';
+	import { Command } from '@tauri-apps/api/shell';
 
 	let showLoading;
 
@@ -25,9 +26,21 @@
 			}
 			showLoading = true;
 			gifPath.set(selectedPath);
-			const content = await readBinaryFile(selectedPath);
+			await exists($outputPath + '/temp').then((res) => {
+				if (!res) createDir($outputPath + '/temp');
+			});
+			await new Command('graphics-magick', [
+				'convert',
+				$gifPath,
+				'-resize',
+				'128x64!',
+				'-colorspace',
+				'Gray',
+				$outputPath + '/temp/resized.gif'
+			]).execute();
+			tempPath.set($outputPath + '/temp/resized.gif');
+			const content = await readBinaryFile($tempPath);
 			blob = new Blob([content], { type: 'image/gif' });
-			image.setAttribute('src', URL.createObjectURL(blob));
 			promisedGif = await fetch(URL.createObjectURL(blob))
 				.then((res) => res.arrayBuffer())
 				.then((buff) => {
@@ -36,7 +49,6 @@
 					console.log(frames);
 					return frames;
 				});
-			console.log(promisedGif);
 			showLoading = false;
 		} catch (err) {
 			console.error(err);
@@ -46,10 +58,8 @@
 
 <div class="gifImporter">
 	<button on:click={getAnimationFile}>Select GIF</button>
-	<img bind:this={image} alt="Selected GIF" height="64" width="128" />
+	<AnimationPreview bind:gif={promisedGif} />
 </div>
-
-<AnimationPreview bind:gif={promisedGif} />
 
 <LoadingDialog bind:showLoading />
 

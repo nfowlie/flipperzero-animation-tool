@@ -8,7 +8,10 @@
 		maxButthurt,
 		minLevel,
 		maxLevel,
-		weight
+		weight,
+		textBoxX,
+		textBoxY,
+		bubbleText
 	} from '../stores';
 	import GifConvert from './GIFConvert.svelte';
 
@@ -111,6 +114,47 @@
 		<label for="weight">Weight</label>
 		<input required name="weight" type="number" placeholder="Weight" min="1" bind:value={$weight} />
 	</div>
+	<div />
+	<h2>Bubble Info</h2>
+	<div />
+	<div>
+		<label for="text-box-x">Text Box X</label>
+		<input required name="text-box-x" type="number" min="0" max="128" bind:value={$textBoxX} />
+	</div>
+	<div>
+		<label for="text-box-y">Text Box Y</label>
+		<input required name="text-box-y" type="number" min="0" max="64" bind:value={$textBoxY} />
+	</div>
+	<div>
+		<label for="align-h">Align Horizontal</label>
+		<input id="left" type="radio" name="align-h" required />
+		<label for="left">Left</label>
+		<input id="center" type="radio" name="align-h" required />
+		<label for="center">Center</label>
+		<input id="right" type="radio" name="align-h" required />
+		<label for="right">Right</label>
+	</div>
+	<div>
+		<label for="align-v">Align Vertical</label>
+		<input id="top" type="radio" name="align-v" required />
+		<label for="top">Top</label>
+		<input id="center" type="radio" name="align-v" required />
+		<label for="center">Center</label>
+		<input id="bottom" type="radio" name="align-v" required />
+		<label for="bottom">Bottom</label>
+	</div>
+	<div>
+		<label for="start-frame">Start Frame</label>
+		<input required name="start-frame" type="number" min="0" max="64" />
+	</div>
+	<div>
+		<label for="end-frame">End Frame</label>
+		<input required name="end-frame" type="number" min="0" max="64" />
+	</div>
+	<div>
+		<label for="bubble-text">Bubble Text</label>
+		<textarea required name="bubble-text" bind:value={$bubbleText} />
+	</div>
 </form>
 
 <GifConvert bind:this={gifConvert} />
@@ -124,18 +168,22 @@
 	}
 
 	label,
-	input {
+	input,
+	textarea {
 		font-size: 1.25rem;
 	}
-	input:not([type='range']) {
+	input:not([type='range']),
+	textarea {
 		background-color: var(--transparency-color);
 		border-color: var(--main-color);
 		color: var(--main-color);
 	}
-	input::placeholder {
+	input::placeholder,
+	textarea {
 		color: var(--main-color);
 	}
-	input:focus {
+	input:focus,
+	textarea {
 		border-color: var(--main-color);
 	}
 	form > h2 {
@@ -144,5 +192,8 @@
 
 	[type='range']:active {
 		--range-thumb-color: var(--main-color);
+	}
+	textarea {
+		resize: none;
 	}
 </style>

@@ -1,6 +1,6 @@
 <script>
 	import { Command } from '@tauri-apps/api/shell';
-	import { gifPath, outputPath } from '../stores';
+	import { gifPath, outputPath, tempPath } from '../stores';
 	import { createDir, exists, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
 	import {
 		flipperzeroDir,
@@ -31,7 +31,7 @@
 			if (!$gifPath) throw new Error('No Gif Selected');
 			const animationExists = await exists($outputPath + '/' + $animationName);
 			if (animationExists) throw new Error('An animation with that name already exists');
-			const frameCount = await new Command('graphics-magick', ['identify', $gifPath])
+			const frameCount = await new Command('graphics-magick', ['identify', $tempPath])
 				.execute()
 				.then((res) => {
 					return res.stdout.split(`\n`).length;
@@ -43,7 +43,7 @@
 
 			await new Command('graphics-magick', [
 				'convert',
-				$gifPath,
+				$tempPath,
 				'-resize',
 				'128x64!',
 				'-colorspace',

@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 
 export const gifPath = writable()
+export const tempPath = writable()
 export const outputPath = writable()
 export const flipperzeroDir = writable();
 
@@ -16,3 +17,8 @@ export const maxButthurt = writable()
 export const minLevel = writable()
 export const maxLevel = writable()
 export const weight = writable()
+
+// Bubble Info
+export const textBoxX = writable()
+export const textBoxY = writable()
+export const bubbleText = writable()
