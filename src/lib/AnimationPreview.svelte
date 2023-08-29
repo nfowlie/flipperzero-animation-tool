@@ -1,7 +1,16 @@
 <script>
 	import { parseGIF, decompressFrames } from 'gifuct-js';
 	import { onMount } from 'svelte';
-	import { fps, textBoxX, textBoxY, bubbleText, alignH, alignV } from '../stores';
+	import {
+		fps,
+		textBoxX,
+		textBoxY,
+		bubbleText,
+		alignH,
+		alignV,
+		startFrame,
+		endFrame
+	} from '../stores';
 	import { text } from '@sveltejs/kit';
 
 	export let gif;
@@ -15,7 +24,7 @@
 		canvasContext,
 		textOverlay,
 		textContext,
-		timeout = [];
+		timeout;
 	$: if (gif) renderGif(gif);
 	$: $fps || $bubbleText, reRender();
 	const reRender = () => {
@@ -75,8 +84,8 @@
 		}
 		const end = new Date().getTime();
 		const diff = end - start;
-
-		setTimeout(() => {
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
 			requestAnimationFrame(renderFrame);
 		}, 1000 / $fps);
 	};
@@ -104,8 +113,9 @@
 		const imageData = gifContext?.getImageData(0, 0, gifCanvas.width, gifCanvas.height);
 		const other = gifContext?.createImageData(gifCanvas.width, gifCanvas.height);
 		canvasContext.putImageData(imageData, 0, 0);
+		textContext?.clearRect(0, 0, canvasWidth, canvasHeight);
 
-		createTextBox();
+		if (frameIndex >= $startFrame && frameIndex <= $endFrame) createTextBox();
 	};
 
 	const createTextBox = () => {
