@@ -1,7 +1,7 @@
 <script>
 	import { parseGIF, decompressFrames } from 'gifuct-js';
 	import { onMount } from 'svelte';
-	import { fps, textBoxX, textBoxY, bubbleText } from '../stores';
+	import { fps, textBoxX, textBoxY, bubbleText, alignH, alignV } from '../stores';
 	import { text } from '@sveltejs/kit';
 
 	export let gif;
@@ -12,19 +12,25 @@
 		canvasHeight = 0,
 		canvasWidth = 0,
 		canvasPreview,
-		canvasContext;
+		canvasContext,
+		textOverlay,
+		textContext,
+		timeout = [];
 	$: if (gif) renderGif(gif);
-	$: $fps,
-		() => {
-			if (gif) {
-				needsDisposal = true;
-				renderGif(gif);
-			}
-		};
+	$: $fps || $bubbleText, reRender();
+	const reRender = () => {
+		if (gif) {
+			needsDisposal = true;
+			renderGif(gif);
+		}
+	};
 
 	onMount(() => {
-		canvasPreview = document.querySelector('canvas');
+		canvasPreview = document.getElementById('AnimationPreview');
 		canvasContext = canvasPreview?.getContext('2d');
+
+		textOverlay = document.getElementById('TextOverlay');
+		textContext = textOverlay?.getContext('2d');
 	});
 
 	const tempCanvas = document.createElement('canvas');
@@ -51,6 +57,7 @@
 
 		if (needsDisposal) {
 			gifContext?.clearRect(0, 0, canvasWidth, canvasHeight);
+			textContext?.clearRect(0, 0, canvasWidth, canvasHeight);
 			needsDisposal = false;
 		}
 
@@ -102,44 +109,84 @@
 	};
 
 	const createTextBox = () => {
-		canvasContext.font = '16px haxrcorp-4089';
+		textContext.font = '16px haxrcorp-4089';
 		let lines = '';
 		let textWidth = 0;
 		if ($bubbleText) {
 			lines = $bubbleText.split('\n');
 			lines.forEach((line, index) => {
-				let lineStartHeight = 13;
-				if (index !== 0) lineStartHeight = 0;
-				canvasContext.strokeText(line, $textBoxX + 3, $textBoxY + lineStartHeight + index * 16);
-				if (textWidth < canvasContext.measureText(line).width)
-					textWidth = canvasContext.measureText(line).width;
+				let lineStartHeight = 10;
+				textContext.fillText(line, $textBoxX + 3, $textBoxY + lineStartHeight + index * 10);
+				if (textWidth < textContext.measureText(line).width)
+					textWidth = textContext.measureText(line).width;
 			});
 		}
 		canvasContext.beginPath();
 		canvasContext.moveTo($textBoxX, $textBoxY);
+		if ($alignH === 'Center' && $alignV === 'Top') {
+			canvasContext.lineTo($textBoxX + textWidth / 2 - 2, $textBoxY);
+			canvasContext.lineTo($textBoxX + textWidth / 2 + 2, $textBoxY - 4);
+			canvasContext.lineTo($textBoxX + textWidth / 2 + 6, $textBoxY);
+		}
 		canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY);
+		if ($alignH === 'Right' && $alignV === 'Top') {
+			canvasContext.lineTo($textBoxX + textWidth + 9, $textBoxY);
+			canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY + 4);
+		}
+		if ($alignH === 'Right' && $alignV === 'Center') {
+			canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY + (lines.length * 10) / 2 - 2);
+			canvasContext.lineTo($textBoxX + textWidth + 9, $textBoxY + (lines.length * 10) / 2 + 2);
+			canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY + (lines.length * 10) / 2 + 6);
+		}
+		if ($alignH === 'Right' && $alignV === 'Bottom') {
+			canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY + lines.length * 10);
+			canvasContext.lineTo($textBoxX + textWidth + 9, $textBoxY + lines.length * 10 + 4);
+		}
 		canvasContext.lineTo($textBoxX + textWidth + 5, $textBoxY + lines.length * 10 + 4);
+		if ($alignH === 'Center' && $alignV === 'Bottom') {
+			canvasContext.lineTo($textBoxX + textWidth / 2 - 2, $textBoxY + lines.length * 10 + 4);
+			canvasContext.lineTo($textBoxX + textWidth / 2 + 2, $textBoxY + lines.length * 10 + 8);
+			canvasContext.lineTo($textBoxX + textWidth / 2 + 6, $textBoxY + lines.length * 10 + 4);
+		}
 		canvasContext.lineTo($textBoxX, $textBoxY + lines.length * 10 + 4);
+
+		if ($alignH === 'Left' && $alignV === 'Top') {
+			canvasContext.lineTo($textBoxX, $textBoxY + 4);
+			canvasContext.lineTo($textBoxX - 4, $textBoxY);
+		}
+		if ($alignH === 'Left' && $alignV === 'Center') {
+			canvasContext.lineTo($textBoxX, $textBoxY + (lines.length * 10) / 2 - 2);
+			canvasContext.lineTo($textBoxX - 4, $textBoxY + (lines.length * 10) / 2 + 2);
+			canvasContext.lineTo($textBoxX, $textBoxY + (lines.length * 10) / 2 + 6);
+		}
+		if ($alignH === 'Left' && $alignV === 'Bottom') {
+			canvasContext.lineTo($textBoxX - 4, $textBoxY + lines.length * 10 + 4);
+			canvasContext.lineTo($textBoxX, $textBoxY + lines.length * 10);
+		}
+		canvasContext.lineTo($textBoxX, $textBoxY);
 
 		canvasContext.stroke();
 		canvasContext.fillStyle = '#fff';
 		canvasContext.fill();
-
-		if ($bubbleText) {
-			lines.forEach((line, index) => {
-				let lineStartHeight = 10;
-				// if (index !== 0) lineStartHeight = 0;
-				canvasContext.strokeText(line, $textBoxX + 3, $textBoxY + lineStartHeight + index * 10);
-			});
-		}
 	};
 </script>
 
-<canvas id="AnimationPreview" height={canvasHeight} width={canvasWidth} />
+<div id="AnimationContainer">
+	<canvas id="AnimationPreview" height={canvasHeight} width={canvasWidth} />
+	<canvas id="TextOverlay" height={canvasHeight} width={canvasWidth} />
+</div>
 
 <style>
-	#AnimationPreview {
+	#AnimationContainer {
+		position: relative;
+		height: 128px;
+	}
+	#AnimationPreview,
+	#TextOverlay {
 		height: calc(64px * 2);
 		width: calc(128px * 2);
+		position: absolute;
+		left: 0;
+		top: 0;
 	}
 </style>

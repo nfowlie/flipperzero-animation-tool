@@ -11,7 +11,11 @@
 		weight,
 		textBoxX,
 		textBoxY,
-		bubbleText
+		bubbleText,
+		alignH,
+		alignV,
+		startFrame,
+		endFrame
 	} from '../stores';
 	import GifConvert from './GIFConvert.svelte';
 
@@ -127,29 +131,29 @@
 	</div>
 	<div>
 		<label for="align-h">Align Horizontal</label>
-		<input id="left" type="radio" name="align-h" required />
+		<input id="left" type="radio" name="align-h" required bind:group={$alignH} value="Left" />
 		<label for="left">Left</label>
-		<input id="center" type="radio" name="align-h" required />
+		<input id="center" type="radio" name="align-h" required bind:group={$alignH} value="Center" />
 		<label for="center">Center</label>
-		<input id="right" type="radio" name="align-h" required />
+		<input id="right" type="radio" name="align-h" required bind:group={$alignH} value="Right" />
 		<label for="right">Right</label>
 	</div>
 	<div>
 		<label for="align-v">Align Vertical</label>
-		<input id="top" type="radio" name="align-v" required />
+		<input id="top" type="radio" name="align-v" required bind:group={$alignV} value="Top" />
 		<label for="top">Top</label>
-		<input id="center" type="radio" name="align-v" required />
+		<input id="center" type="radio" name="align-v" required bind:group={$alignV} value="Center" />
 		<label for="center">Center</label>
-		<input id="bottom" type="radio" name="align-v" required />
+		<input id="bottom" type="radio" name="align-v" required bind:group={$alignV} value="Bottom" />
 		<label for="bottom">Bottom</label>
 	</div>
 	<div>
 		<label for="start-frame">Start Frame</label>
-		<input required name="start-frame" type="number" min="0" max="64" />
+		<input required name="start-frame" type="number" min="0" max="64" bind:value={$startFrame} />
 	</div>
 	<div>
 		<label for="end-frame">End Frame</label>
-		<input required name="end-frame" type="number" min="0" max="64" />
+		<input required name="end-frame" type="number" min="0" max="64" bind:value={$endFrame} />
 	</div>
 	<div>
 		<label for="bubble-text">Bubble Text</label>

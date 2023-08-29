@@ -12,7 +12,14 @@
 		maxButthurt,
 		minLevel,
 		maxLevel,
-		weight
+		weight,
+		textBoxX,
+		textBoxY,
+		alignH,
+		alignV,
+		startFrame,
+		endFrame,
+		bubbleText
 	} from '../stores';
 	import FlipperZero from './FlipperZero.svelte';
 	import LoadingDialog from './LoadingDialog.svelte';
@@ -67,6 +74,7 @@
 				frameOrder += i + ' ';
 			}
 			frameOrder = frameOrder.trim();
+			let bubbleCount = 1;
 			const metaText =
 				'Filetype: Flipper Animation\nVersion: 1\n\nWidth: 128\nHeight: 64\nPassive frames: ' +
 				(frameCount - 1) +
@@ -78,7 +86,23 @@
 				$duration +
 				'\nActive cooldown: ' +
 				$cooldown +
-				'\n\nBubble slots: 0\n';
+				'\n\nBubble slots: ' +
+				bubbleCount +
+				'\n\nSlot: 0\nX: ' +
+				$textBoxX +
+				'\nY: ' +
+				$textBoxY +
+				'\nText: ' +
+				$bubbleText.replace('\n', '\\n') +
+				'\nAlignH: ' +
+				$alignH +
+				'\nAlignV: ' +
+				$alignV +
+				'\nStartFrame: ' +
+				$startFrame +
+				'\nEndFrame: ' +
+				$endFrame +
+				'\n';
 			await writeTextFile($outputPath + '/' + $animationName + '/meta.txt', metaText);
 			editManifest();
 		} catch (err) {
