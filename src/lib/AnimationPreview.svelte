@@ -189,12 +189,11 @@
 <style>
 	#AnimationContainer {
 		position: relative;
-		height: 128px;
 	}
 	#AnimationPreview,
 	#TextOverlay {
-		height: calc(64px * 2);
-		width: calc(128px * 2);
+		height: calc(64px);
+		width: calc(128px);
 		position: absolute;
 		left: 0;
 		top: 0;

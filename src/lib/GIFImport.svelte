@@ -2,7 +2,7 @@
 	import { open } from '@tauri-apps/api/dialog';
 	import { readDir, readBinaryFile, exists, createDir } from '@tauri-apps/api/fs';
 	import { writable } from 'svelte/store';
-	import { gifPath, outputPath, tempPath } from '../stores.js';
+	import { gifPath, outputPath, tempPath, gifFrameLength } from '../stores.js';
 	import LoadingDialog from './LoadingDialog.svelte';
 	import AnimationPreview from './AnimationPreview.svelte';
 	import { parseGIF, decompressFrames } from 'gifuct-js';
@@ -49,6 +49,7 @@
 					console.log(frames);
 					return frames;
 				});
+			gifFrameLength.set(promisedGif.length);
 			showLoading = false;
 		} catch (err) {
 			console.error(err);

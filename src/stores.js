@@ -4,6 +4,7 @@ export const gifPath = writable()
 export const tempPath = writable()
 export const outputPath = writable()
 export const flipperzeroDir = writable();
+export const gifFrameLength = writable()
 
 // GIF Info
 export const animationName = writable('');
@@ -19,6 +20,7 @@ export const maxLevel = writable()
 export const weight = writable()
 
 // Bubble Info
+export const bubbleTextPresent = writable()
 export const textBoxX = writable()
 export const textBoxY = writable()
 export const bubbleText = writable()

@@ -15,11 +15,20 @@
 		alignH,
 		alignV,
 		startFrame,
-		endFrame
+		endFrame,
+		gifFrameLength,
+		bubbleTextPresent
 	} from '../stores';
 	import GifConvert from './GIFConvert.svelte';
 
 	let gifConvert;
+
+	$: $bubbleText, checkIfBubbleText();
+
+	const checkIfBubbleText = () => {
+		if ($bubbleText?.trim() == '') bubbleTextPresent.set(false);
+		else bubbleTextPresent.set(true);
+	};
 </script>
 
 <form
@@ -123,41 +132,111 @@
 	<div />
 	<div>
 		<label for="text-box-x">Text Box X</label>
-		<input required name="text-box-x" type="number" min="0" max="128" bind:value={$textBoxX} />
+		<input
+			required={$bubbleTextPresent}
+			name="text-box-x"
+			type="number"
+			min="0"
+			max="128"
+			bind:value={$textBoxX}
+		/>
 	</div>
 	<div>
 		<label for="text-box-y">Text Box Y</label>
-		<input required name="text-box-y" type="number" min="0" max="64" bind:value={$textBoxY} />
+		<input
+			required={$bubbleTextPresent}
+			name="text-box-y"
+			type="number"
+			min="0"
+			max="64"
+			bind:value={$textBoxY}
+		/>
 	</div>
 	<div>
 		<label for="align-h">Align Horizontal</label>
-		<input id="left" type="radio" name="align-h" required bind:group={$alignH} value="Left" />
+		<input
+			id="left"
+			type="radio"
+			name="align-h"
+			required={$bubbleTextPresent}
+			bind:group={$alignH}
+			value="Left"
+		/>
 		<label for="left">Left</label>
-		<input id="center" type="radio" name="align-h" required bind:group={$alignH} value="Center" />
+		<input
+			id="center"
+			type="radio"
+			name="align-h"
+			required={$bubbleTextPresent}
+			bind:group={$alignH}
+			value="Center"
+		/>
 		<label for="center">Center</label>
-		<input id="right" type="radio" name="align-h" required bind:group={$alignH} value="Right" />
+		<input
+			id="right"
+			type="radio"
+			name="align-h"
+			required={$bubbleTextPresent}
+			bind:group={$alignH}
+			value="Right"
+		/>
 		<label for="right">Right</label>
 	</div>
 	<div>
 		<label for="align-v">Align Vertical</label>
-		<input id="top" type="radio" name="align-v" required bind:group={$alignV} value="Top" />
+		<input
+			id="top"
+			type="radio"
+			name="align-v"
+			required={$bubbleTextPresent}
+			bind:group={$alignV}
+			value="Top"
+		/>
 		<label for="top">Top</label>
-		<input id="center" type="radio" name="align-v" required bind:group={$alignV} value="Center" />
+		<input
+			id="center"
+			type="radio"
+			name="align-v"
+			required={$bubbleTextPresent}
+			bind:group={$alignV}
+			value="Center"
+		/>
 		<label for="center">Center</label>
-		<input id="bottom" type="radio" name="align-v" required bind:group={$alignV} value="Bottom" />
+		<input
+			id="bottom"
+			type="radio"
+			name="align-v"
+			required={$bubbleTextPresent}
+			bind:group={$alignV}
+			value="Bottom"
+		/>
 		<label for="bottom">Bottom</label>
 	</div>
 	<div>
 		<label for="start-frame">Start Frame</label>
-		<input required name="start-frame" type="number" min="0" max="64" bind:value={$startFrame} />
+		<input
+			required={$bubbleTextPresent}
+			name="start-frame"
+			type="number"
+			min="0"
+			max={$gifFrameLength - 1}
+			bind:value={$startFrame}
+		/>
 	</div>
 	<div>
 		<label for="end-frame">End Frame</label>
-		<input required name="end-frame" type="number" min="0" max="64" bind:value={$endFrame} />
+		<input
+			required={$bubbleTextPresent}
+			name="end-frame"
+			type="number"
+			min="0"
+			max={$gifFrameLength - 1}
+			bind:value={$endFrame}
+		/>
 	</div>
 	<div>
 		<label for="bubble-text">Bubble Text</label>
-		<textarea required name="bubble-text" bind:value={$bubbleText} />
+		<textarea name="bubble-text" bind:value={$bubbleText} />
 	</div>
 </form>
 
