@@ -97,7 +97,7 @@
 			name="max-butthurt"
 			type="number"
 			placeholder="Max Butthurt"
-			min="0"
+			min={$minButthurt + 1}
 			bind:value={$maxButthurt}
 		/>
 	</div>
@@ -119,7 +119,7 @@
 			name="max-level"
 			type="number"
 			placeholder="Max Level"
-			min="0"
+			min={$minLevel + 1}
 			bind:value={$maxLevel}
 		/>
 	</div>
