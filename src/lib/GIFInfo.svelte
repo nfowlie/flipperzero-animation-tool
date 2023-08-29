@@ -139,6 +139,7 @@
 			min="0"
 			max="128"
 			bind:value={$textBoxX}
+			placeholder="Text Box X Coordinate"
 		/>
 	</div>
 	<div>
@@ -150,6 +151,7 @@
 			min="0"
 			max="64"
 			bind:value={$textBoxY}
+			placeholder="Text Box Y Coordinate"
 		/>
 	</div>
 	<div>
@@ -221,6 +223,7 @@
 			min="0"
 			max={$gifFrameLength - 1}
 			bind:value={$startFrame}
+			placeholder="Frame to start bubble"
 		/>
 	</div>
 	<div>
@@ -232,11 +235,12 @@
 			min="0"
 			max={$gifFrameLength - 1}
 			bind:value={$endFrame}
+			placeholder="Frame to end bubble"
 		/>
 	</div>
 	<div>
 		<label for="bubble-text">Bubble Text</label>
-		<textarea name="bubble-text" bind:value={$bubbleText} />
+		<textarea name="bubble-text" bind:value={$bubbleText} placeholder="Bubble Text" />
 	</div>
 </form>
 
@@ -262,7 +266,7 @@
 		color: var(--main-color);
 	}
 	input::placeholder,
-	textarea {
+	textarea::placeholder {
 		color: var(--main-color);
 	}
 	input:focus,
