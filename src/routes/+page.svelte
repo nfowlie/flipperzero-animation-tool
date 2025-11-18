@@ -6,14 +6,33 @@
 	import FlipperZero from '$lib/FlipperZero.svelte';
 	import GifConvert from '$lib/GIFConvert.svelte';
 	import { listen } from '@tauri-apps/api/event';
-	import Modal from '$lib/FlipperZeroDialog.svelte';
+	import FirmwareModal from '$lib/FlipperZeroDialog.svelte';
 	import { flipperzeroDir, outputPath } from '../stores';
 	import '@picocss/pico';
-	// import Dys from '../../static/fonts/LigaOpenDyslexic3-Regular.ttf';
+	import UpdateDialog from '$lib/UpdateDialog.svelte';
+	import AboutDialog from '$lib/AboutDialog.svelte';
 
-	let showModal = $state();
-	const unlisten = listen('show_modal', (payload) => {
-		showModal = true;
+	let showFirmwareModal = $state();
+	let showAboutModal = $state();
+	let showUpdateModal = $state();
+	let appVersion = $state();
+
+	listen('show_firmware_modal', (payload) => {
+		showFirmwareModal = true;
+	});
+
+	listen('show_update_modal', (payload) => {
+		console.log(payload);
+		appVersion = payload.payload.message;
+		console.log(appVersion);
+		showUpdateModal = true;
+	});
+
+	listen('show_about_modal', (payload) => {
+		console.log(payload);
+		appVersion = payload.payload.message;
+		console.log(appVersion);
+		showAboutModal = true;
 	});
 
 	flipperzeroDir.set(localStorage.getItem('flipperzeroDir'));
@@ -22,7 +41,7 @@
 	run(() => {
 		($flipperzeroDir,
 			(() => {
-				showModal = $flipperzeroDir == null ? true : false;
+				showFirmwareModal = $flipperzeroDir == null ? true : false;
 			})());
 	});
 </script>
@@ -33,7 +52,9 @@
 	<GifInfo />
 </main>
 
-<Modal bind:showModal />
+<FirmwareModal bind:showFirmwareModal />
+<UpdateDialog bind:showUpdateModal bind:appVersion />
+<AboutDialog bind:showAboutModal bind:appVersion />
 
 <style>
 	:global(*),

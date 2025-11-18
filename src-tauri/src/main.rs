@@ -1,4 +1,7 @@
-use tauri::{menu::MenuBuilder, Emitter};
+use tauri::{
+    menu::{MenuBuilder, SubmenuBuilder},
+    Emitter,
+};
 use tauri_plugin_dialog::DialogExt;
 
 #[derive(Clone, serde::Serialize)]
@@ -8,15 +11,25 @@ struct Payload {
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
-            let menu = MenuBuilder::new(app)
-                .text("quit", "Quit")
+            let file_menu = SubmenuBuilder::new(app, "File")
                 .text("flipzero_firmware_dir", "Change Firmware Directory")
+                .text("quit", "Quit")
+                .build()?;
+
+            let help_menu = SubmenuBuilder::new(app, "Help")
+                .text("check_update", "Check For Updates")
+                .text("about", "About")
+                .build()?;
+
+            let menu = MenuBuilder::new(app)
+                .items(&[&file_menu, &help_menu])
                 .build()?;
 
             app.set_menu(menu)?;
@@ -30,9 +43,25 @@ fn main() {
 
                     "flipzero_firmware_dir" => app_handle
                         .emit(
-                            "show_modal",
+                            "show_firmware_modal",
                             Payload {
                                 message: "Show Modal".into(),
+                            },
+                        )
+                        .unwrap(),
+                    "check_update" => app_handle
+                        .emit(
+                            "show_update_modal",
+                            Payload {
+                                message: app_handle.package_info().version.to_string(),
+                            },
+                        )
+                        .unwrap(),
+                    "about" => app_handle
+                        .emit(
+                            "show_about_modal",
+                            Payload {
+                                message: app_handle.package_info().version.to_string(),
                             },
                         )
                         .unwrap(),

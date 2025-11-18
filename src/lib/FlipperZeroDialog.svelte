@@ -5,15 +5,15 @@
 	import { open } from '@tauri-apps/plugin-dialog';
 	import { flipperzeroDir, outputPath } from '../stores.js';
 
-	let { showModal = $bindable() } = $props();
+	let { showFirmwareModal = $bindable() } = $props();
 
 	let dialog = $state();
 
 	run(() => {
-		if (dialog && showModal) dialog.showModal();
+		if (dialog && showFirmwareModal) dialog.showModal();
 	});
 	run(() => {
-		if (dialog && !showModal) dialog.close();
+		if (dialog && !showFirmwareModal) dialog.close();
 	});
 
 	const setFlipperZeroDir = async () => {
@@ -29,7 +29,11 @@
 	};
 </script>
 
-<dialog bind:this={dialog} onclose={() => (showModal = false)} onclick={self(() => dialog.close())}>
+<dialog
+	bind:this={dialog}
+	onclose={() => (showFirmwareModal = false)}
+	onclick={self(() => dialog.close())}
+>
 	<div onclick={stopPropagation(bubble('click'))}>
 		<h1>Select FlipperZero Firmware Directory</h1>
 		<h2>Current FlipperZero Firmware Directory</h2>
