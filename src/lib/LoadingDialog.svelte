@@ -1,30 +1,37 @@
-<script>
-	import { open } from '@tauri-apps/api/dialog';
+<script lang="ts">
+	import { run, self, createBubbler, stopPropagation } from 'svelte/legacy';
 
-	export let showLoading;
+	const bubble = createBubbler();
+	import { open } from '@tauri-apps/plugin-dialog';
 
-	let dialog;
+	let { showLoading = $bindable() } = $props();
 
-	$: if (dialog && showLoading) dialog.showModal();
-	$: if (dialog && !showLoading) dialog.close();
+	let dialog = $state();
+
+	run(() => {
+		if (dialog && showLoading) dialog.showModal();
+	});
+	run(() => {
+		if (dialog && !showLoading) dialog.close();
+	});
 </script>
 
 <dialog
 	bind:this={dialog}
-	on:close={() => (showLoading = false)}
-	on:click|self={() => dialog.close()}
+	onclose={() => (showLoading = false)}
+	onclick={self(() => dialog.close())}
 >
-	<div class="center" on:click|stopPropagation>
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
-		<div class="wave" />
+	<div class="center" onclick={stopPropagation(bubble('click'))}>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
 	</div>
 </dialog>
 

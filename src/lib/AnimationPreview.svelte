@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { parseGIF, decompressFrames } from 'gifuct-js';
 	import { onMount } from 'svelte';
 	import {
@@ -13,20 +15,18 @@
 	} from '../stores';
 	import { text } from '@sveltejs/kit';
 
-	export let gif;
+	let { gif } = $props();
 	let loadedFrames,
 		frameIndex = 0,
 		needsDisposal = false,
 		frameImageData,
-		canvasHeight = 0,
-		canvasWidth = 0,
+		canvasHeight = $state(0),
+		canvasWidth = $state(0),
 		canvasPreview,
 		canvasContext,
 		textOverlay,
 		textContext,
 		timeout;
-	$: if (gif) renderGif(gif);
-	$: $fps || $bubbleText, reRender();
 	const reRender = () => {
 		if (gif) {
 			needsDisposal = true;
@@ -179,11 +179,17 @@
 		canvasContext.fillStyle = '#fff';
 		canvasContext.fill();
 	};
+	run(() => {
+		if (gif) renderGif(gif);
+	});
+	run(() => {
+		$fps || $bubbleText, reRender();
+	});
 </script>
 
 <div id="AnimationContainer">
-	<canvas id="AnimationPreview" height={canvasHeight} width={canvasWidth} />
-	<canvas id="TextOverlay" height={canvasHeight} width={canvasWidth} />
+	<canvas id="AnimationPreview" height={canvasHeight} width={canvasWidth}></canvas>
+	<canvas id="TextOverlay" height={canvasHeight} width={canvasWidth}></canvas>
 </div>
 
 <style>

@@ -1,9 +1,9 @@
 <script>
-	import { exists, readDir, removeFile } from '@tauri-apps/api/fs';
-	import { open } from '@tauri-apps/api/dialog';
-	import { Command } from '@tauri-apps/api/shell';
+	import { exists, readDir, remove } from '@tauri-apps/plugin-fs';
+	import { open } from '@tauri-apps/plugin-dialog';
+	import { Command } from '@tauri-apps/plugin-shell';
 	import { flipperzeroDir } from '../stores';
-	import { platform } from '@tauri-apps/api/os';
+	import { platform } from '@tauri-apps/plugin-os';
 
 	export const convertFramesToFlipper = async () => {
 		try {
@@ -11,8 +11,7 @@
 			const manifestExists = await exists(
 				$flipperzeroDir + '/assets/resources/dolphin/manifest.txt'
 			);
-			if (manifestExists)
-				await removeFile($flipperzeroDir + '/assets/resources/dolphin/manifest.txt');
+			if (manifestExists) await remove($flipperzeroDir + '/assets/resources/dolphin/manifest.txt');
 			if (os == 'win32') {
 				await new Command(
 					'flipperzero-frames-win',
@@ -33,9 +32,3 @@
 </script>
 
 <button form="gif-form" type="submit">Convert To Flipper Animation</button>
-
-<style>
-	button {
-		margin-inline: 1.2rem;
-	}
-</style>

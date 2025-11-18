@@ -1,13 +1,20 @@
-<script>
-	import { open } from '@tauri-apps/api/dialog';
+<script lang="ts">
+	import { run, self, createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	import { open } from '@tauri-apps/plugin-dialog';
 	import { flipperzeroDir, outputPath } from '../stores.js';
 
-	export let showModal;
+	let { showModal = $bindable() } = $props();
 
-	let dialog;
+	let dialog = $state();
 
-	$: if (dialog && showModal) dialog.showModal();
-	$: if (dialog && !showModal) dialog.close();
+	run(() => {
+		if (dialog && showModal) dialog.showModal();
+	});
+	run(() => {
+		if (dialog && !showModal) dialog.close();
+	});
 
 	const setFlipperZeroDir = async () => {
 		try {
@@ -22,15 +29,11 @@
 	};
 </script>
 
-<dialog
-	bind:this={dialog}
-	on:close={() => (showModal = false)}
-	on:click|self={() => dialog.close()}
->
-	<div on:click|stopPropagation>
+<dialog bind:this={dialog} onclose={() => (showModal = false)} onclick={self(() => dialog.close())}>
+	<div onclick={stopPropagation(bubble('click'))}>
 		<h1>Select FlipperZero Firmware Directory</h1>
 		<h2>Current FlipperZero Firmware Directory</h2>
-		<button on:click={setFlipperZeroDir}>SELECT</button>
+		<button onclick={setFlipperZeroDir}>SELECT</button>
 		<p>{$flipperzeroDir != null ? $flipperzeroDir : ``}</p>
 	</div>
 </dialog>

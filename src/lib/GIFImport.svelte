@@ -1,18 +1,18 @@
 <script>
-	import { open } from '@tauri-apps/api/dialog';
-	import { readDir, readBinaryFile, exists, createDir } from '@tauri-apps/api/fs';
+	import { open } from '@tauri-apps/plugin-dialog';
+	import { readDir, readFile, exists, mkdir } from '@tauri-apps/plugin-fs';
 	import { writable } from 'svelte/store';
 	import { gifPath, outputPath, tempPath, gifFrameLength } from '../stores.js';
 	import LoadingDialog from './LoadingDialog.svelte';
 	import AnimationPreview from './AnimationPreview.svelte';
 	import { parseGIF, decompressFrames } from 'gifuct-js';
-	import { Command } from '@tauri-apps/api/shell';
+	import { Command } from '@tauri-apps/plugin-shell';
 
-	let showLoading;
+	let showLoading = $state();
 
 	let image;
 	let blob;
-	let promisedGif;
+	let promisedGif = $state();
 	const getAnimationFile = async () => {
 		try {
 			let selectedPath = await open({
@@ -27,7 +27,7 @@
 			showLoading = true;
 			gifPath.set(selectedPath);
 			await exists($outputPath + '/temp').then((res) => {
-				if (!res) createDir($outputPath + '/temp');
+				if (!res) mkdir($outputPath + '/temp');
 			});
 			await new Command('graphics-magick', [
 				'convert',
@@ -38,8 +38,9 @@
 				'Gray',
 				$outputPath + '/temp/resized.gif'
 			]).execute();
+			console.log(tempPath);
 			tempPath.set($outputPath + '/temp/resized.gif');
-			const content = await readBinaryFile($tempPath);
+			const content = await readFile($tempPath);
 			blob = new Blob([content], { type: 'image/gif' });
 			promisedGif = await fetch(URL.createObjectURL(blob))
 				.then((res) => res.arrayBuffer())
@@ -58,23 +59,18 @@
 </script>
 
 <div class="gifImporter">
-	<button on:click={getAnimationFile}>Select GIF</button>
+	<button onclick={getAnimationFile}>Select GIF</button>
 	<AnimationPreview bind:gif={promisedGif} />
 </div>
 
 <LoadingDialog bind:showLoading />
 
 <style>
-	button {
-		margin-inline: 1.2rem;
+	.gifImporter {
+		display: flex;
+		gap: var(--spacing-inline);
 	}
 	img:not([src]) {
 		display: none;
-	}
-	img {
-		margin-bottom: 1.2rem;
-	}
-	.gifImporter {
-		display: flex;
 	}
 </style>

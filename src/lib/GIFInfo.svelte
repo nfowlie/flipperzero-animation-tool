@@ -1,4 +1,6 @@
 <script>
+	import { run, preventDefault } from 'svelte/legacy';
+
 	import {
 		animationName,
 		fps,
@@ -24,23 +26,26 @@
 		if ($bubbleText?.trim() == '' || $bubbleText == undefined) bubbleTextPresent.set(false);
 		else bubbleTextPresent.set(true);
 	};
-	let gifConvert;
+	let gifConvert = $state();
 	bubbleTextPresent.set(false);
-	$: $bubbleText, checkIfBubbleText();
+	run(() => {
+		($bubbleText, checkIfBubbleText());
+	});
 </script>
 
 <form
 	id="gif-form"
-	on:submit|preventDefault={() => {
+	onsubmit={preventDefault(() => {
 		gifConvert.convertGif();
-	}}
+	})}
 >
 	<h2>Animation Information</h2>
-	<div />
+	<div></div>
 	<div>
 		<label for="animation-name">Animation Name</label>
 		<input
 			required
+			title="jjjfkjkldsfjl;sdjfkldsjfl;ajf;lsad fsa lfjasdl; kf;laj fls"
 			name="animation-name"
 			type="text"
 			placeholder="Animation Name"
@@ -76,7 +81,7 @@
 		/>
 	</div>
 	<h2>Animation Settings</h2>
-	<div />
+	<div></div>
 	<div>
 		<label for="min-butthurt">Min butthurt</label>
 		<input
@@ -125,9 +130,9 @@
 		<label for="weight">Weight</label>
 		<input required name="weight" type="number" placeholder="Weight" min="1" bind:value={$weight} />
 	</div>
-	<div />
+	<div></div>
 	<h2>Bubble Info</h2>
-	<div />
+	<div></div>
 	<div>
 		<label for="text-box-x">Text Box X</label>
 		<input
@@ -238,7 +243,7 @@
 	</div>
 	<div>
 		<label for="bubble-text">Bubble Text</label>
-		<textarea name="bubble-text" bind:value={$bubbleText} placeholder="Bubble Text" />
+		<textarea name="bubble-text" bind:value={$bubbleText} placeholder="Bubble Text"></textarea>
 	</div>
 </form>
 
@@ -249,7 +254,6 @@
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		column-gap: 5%;
-		padding-inline: 1.2rem;
 	}
 
 	label,

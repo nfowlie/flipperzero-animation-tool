@@ -1,4 +1,6 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import GifInfo from '$lib/GIFInfo.svelte';
 	import GIFImport from '$lib/GIFImport.svelte';
 	import FlipperZero from '$lib/FlipperZero.svelte';
@@ -9,7 +11,7 @@
 	import '@picocss/pico';
 	// import Dys from '../../static/fonts/LigaOpenDyslexic3-Regular.ttf';
 
-	let showModal;
+	let showModal = $state();
 	const unlisten = listen('show_modal', (payload) => {
 		showModal = true;
 	});
@@ -17,15 +19,19 @@
 	flipperzeroDir.set(localStorage.getItem('flipperzeroDir'));
 	outputPath.set(localStorage.getItem('flipperzeroDir') + '/assets/dolphin/external');
 
-	$: $flipperzeroDir,
-		(() => {
-			showModal = $flipperzeroDir == null ? true : false;
-		})();
+	run(() => {
+		($flipperzeroDir,
+			(() => {
+				showModal = $flipperzeroDir == null ? true : false;
+			})());
+	});
 </script>
 
-<h1>FlipperZero Animation Tool</h1>
-<GIFImport />
-<GifInfo />
+<main>
+	<h1>FlipperZero Animation Tool</h1>
+	<GIFImport />
+	<GifInfo />
+</main>
 
 <Modal bind:showModal />
 
@@ -45,7 +51,10 @@
 		height: fit-content;
 	}
 
-	h1 {
-		margin-inline: 1.2rem;
+	main {
+		display: grid;
+		margin-block: calc(var(--spacing-block) / 2);
+		margin-inline: var(--spacing-inline);
+		gap: var(--spacing-block);
 	}
 </style>

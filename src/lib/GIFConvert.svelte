@@ -1,7 +1,7 @@
 <script>
-	import { Command } from '@tauri-apps/api/shell';
+	import { Command } from '@tauri-apps/plugin-shell';
 	import { gifPath, outputPath, tempPath } from '../stores';
-	import { createDir, exists, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
+	import { create, mkdir, exists, readTextFile, writeTextFile } from '@tauri-apps/plugin-fs';
 	import {
 		flipperzeroDir,
 		animationName,
@@ -24,8 +24,8 @@
 	} from '../stores';
 	import FlipperZero from './FlipperZero.svelte';
 	import LoadingDialog from './LoadingDialog.svelte';
-	let flipperzero;
-	let showLoading;
+	let flipperzero = $state();
+	let showLoading = $state();
 
 	export const convertGif = async () => {
 		try {
@@ -46,7 +46,7 @@
 				});
 
 			await exists($outputPath + '/' + $animationName).then((res) => {
-				if (!res) createDir($outputPath + '/' + $animationName);
+				if (!res) mkdir($outputPath + '/' + $animationName);
 			});
 
 			await new Command('graphics-magick', [
@@ -110,10 +110,18 @@
 				bubbleCount +
 				'\n' +
 				metaTextBubble;
-			await writeTextFile($outputPath + '/' + $animationName + '/meta.txt', metaText);
+
+			console.log($outputPath + '/' + $animationName + '/' + 'meta.txt');
+			const file = await create(`${$outputPath}/${$animationName}/meta.txt`);
+			await file.write(new TextEncoder().encode('metaText'));
+			await file.close();
+
+			// await createTextFile($outputPath + '/' + $animationName + '/meta.txt');
+			// await writeTextFile($outputPath + '/' + $animationName + '/meta.txt', metaText);
 			editManifest();
 		} catch (err) {
 			console.error('Error creating Meta.txt for animation');
+			console.error(err);
 			showLoading = false;
 			alert('Error creating Meta.txt for animation');
 		}
