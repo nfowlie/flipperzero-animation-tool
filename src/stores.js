@@ -9,15 +9,15 @@ export const gifFrameLength = writable()
 // GIF Info
 export const animationName = writable('');
 export const fps = writable(1);
-export const duration = writable()
-export const cooldown = writable()
+export const duration = writable(3600)
+export const cooldown = writable(1)
 
 // Manifest Info
-export const minButthurt = writable()
-export const maxButthurt = writable()
-export const minLevel = writable()
-export const maxLevel = writable()
-export const weight = writable()
+export const minButthurt = writable(0)
+export const maxButthurt = writable(3)
+export const minLevel = writable(0)
+export const maxLevel = writable(3)
+export const weight = writable(3)
 
 // Bubble Info
 export const bubbleTextPresent = writable()
