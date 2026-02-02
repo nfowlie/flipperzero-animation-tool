@@ -39,10 +39,10 @@
 			if (!$gifPath) throw new Error('No Gif Selected');
 			const animationExists = await exists($outputPath + '/' + $animationName);
 			if (animationExists) throw new Error('An animation with that name already exists');
-			const frameCount = await new Command('graphics-magick', ['identify', $tempPath])
+			const frameCount = await new Command('graphics-magick', ['identify', '-format', '"%n\n"', $tempPath])
 				.execute()
 				.then((res) => {
-					return res.stdout.split(`\n`).length;
+					return res.stdout.replace('"','').split(`\n`)[0];
 				});
 
 			await exists($outputPath + '/' + $animationName).then((res) => {
@@ -74,6 +74,8 @@
 			for (let i = 0; i < frameCount; i++) {
 				frameOrder += i + ' ';
 			}
+			console.log(frameCount)
+			console.log(frameOrder)
 			frameOrder = frameOrder.trim();
 			let bubbleCount = $bubbleTextPresent ? 1 : 0;
 			let metaTextBubble = '';
@@ -113,7 +115,7 @@
 
 			console.log($outputPath + '/' + $animationName + '/' + 'meta.txt');
 			const file = await create(`${$outputPath}/${$animationName}/meta.txt`);
-			await file.write(new TextEncoder().encode('metaText'));
+			await file.write(new TextEncoder().encode(metaText));
 			await file.close();
 
 			// await createTextFile($outputPath + '/' + $animationName + '/meta.txt');

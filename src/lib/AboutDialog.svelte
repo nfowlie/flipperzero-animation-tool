@@ -2,8 +2,6 @@
 	import { run, self, createBubbler, stopPropagation } from 'svelte/legacy';
 
 	const bubble = createBubbler();
-	import { open } from '@tauri-apps/plugin-dialog';
-	import { flipperzeroDir, outputPath } from '../stores.js';
 
 	let { showAboutModal = $bindable(), appVersion = $bindable() } = $props();
 

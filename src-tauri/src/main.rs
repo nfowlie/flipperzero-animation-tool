@@ -73,5 +73,5 @@ fn main() {
 
             Ok(())
         })
-        .run(tauri::generate_context!());
+        .run(tauri::generate_context!()).map_err(|err| println!("{:?}",err)).ok();
 }

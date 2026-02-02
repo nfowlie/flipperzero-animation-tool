@@ -36,7 +36,7 @@ An application to turn animated GIFs into FlipperZero animation data.
     - End Frame `Frame to end the speech bubble`
     - Bubble Text `Text to appear in the speech bubble`
 11. Click the Convert To Flipper Animation button
-12. Go to the %flipper-zero-firmware%/assets/resources/dolphin directory
+12. Go to the %flipper-zero-firmware%/build/f7-firmware-D/assets/compiled/dolphin directory
 13. Copy your animation folder and the manifest.txt to the /SD Card/dolphin directory
 
 ## Requirements
