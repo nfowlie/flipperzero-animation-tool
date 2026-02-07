@@ -35,9 +35,13 @@
 		"resources": [],
 		"shortDescription": "",
 		"linux": {
+			"appimage":{
+
+			},
 			"deb": {
 				"depends": []
-			}
+			},
+			"rpm":{}
 		}
 	},
 	"productName": "flipperzero-animation-tool",
